@@ -12,4 +12,9 @@ services:
       - .:/src
     working_dir: /src
     restart: always
-    command: node /src/batch/index.js
+    command: node /src/batch/item_log.js
+    networks:
+      - bocchi-chan-docker_default
+networks:
+    bocchi-chan-docker_default:
+      external: true
