@@ -12,4 +12,4 @@ services:
       - .:/src
     working_dir: /src
     restart: always
-    command: node /src/index.js
+    command: node /src/batch/index.js
