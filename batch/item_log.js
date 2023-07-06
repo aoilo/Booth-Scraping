@@ -50,7 +50,7 @@ const scrapeWebsite = async () => {
                     } else {
                         like = parseInt(like, 10);
                     }
-                    item.like = like
+                    item.likes = like
 
 
                     itemData.push(item);
@@ -73,7 +73,7 @@ const insertItemData = async (itemData) => {
                 await ItemLog.create({
                     item_id: item.booth_item_id,
                     data_product_id: item.data_product_id,
-                    like: item.like
+                    likes: item.likes
                 });
             })
         );
