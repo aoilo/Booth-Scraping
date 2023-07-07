@@ -7,22 +7,18 @@ const sequelize = require('../service/database');
 const BoothItem = require('../models/BoothItem');
 const ItemLog = require('../models/ItemLog');
 
-
 sequelize.authenticate();
 
-const now = moment();
-
-const oneWeekAgo = now.clone().subtract(1, 'week');
-
-const query = {
-    where: {
-        created_at: {
-            [Op.between]: [oneWeekAgo, now],
-        },
-    },
-};
-
 const scrapeWebsite = async () => {
+    const now = moment();
+    const oneWeekAgo = now.clone().subtract(1, 'week');
+    const query = {
+        where: {
+            created_at: {
+                [Op.between]: [oneWeekAgo, now],
+            },
+        },
+    }
     try {
         const results = await BoothItem.findAll(query);
         const itemData = [];
@@ -37,10 +33,9 @@ const scrapeWebsite = async () => {
                     item.booth_item_id = el.id;
                     item.data_product_id = $('.market').attr('data-product-id');
                     item.data_product_brand = $('.market').attr('data-product-brand');
-                    // item.data_shop_tracking_product_id = $('.market').attr('data-shop-tracking-product-id');
                     item.data_product_category = $('.market').attr('data-product-category');
                     item.img = $('.market-item-detail-item-image-wrapper > img').attr('src');
-                    like = $('.wishlists_count').first().text();
+                    let like = $('.wishlists_count').first().text();
                     if (typeof like == 'undefined') {
                         like = null
                     } else if (like == null) {
@@ -51,9 +46,8 @@ const scrapeWebsite = async () => {
                         like = parseInt(like, 10);
                     }
                     item.likes = like
-
-
                     itemData.push(item);
+                    return item;
                 } catch (error) {
                     console.error(error);
                 }
@@ -82,17 +76,14 @@ const insertItemData = async (itemData) => {
     }
 };
 
-
-
-
-cron.schedule('*/15 * * * *', () => {
+cron.schedule('*/15 * * * *', async () => {
     console.log('Running the scraper...');
-    scrapeWebsite().then(async (itemData) => {
+    try {
+        const itemData = await scrapeWebsite();
         console.log(itemData);
-        await insertItemData(itemData)
-
-    })
-    console.log('Scraped Data:', scrapedData);
+        await insertItemData(itemData);
+        console.log('Scraped Data:', itemData);
+    } catch (error) {
+        console.error('Error during scraping or data insertion:', error);
+    }
 });
-
-
