@@ -27,15 +27,17 @@ const scrapeWebsite = async () => {
             results.map(async (el) => {
                 const item = {};
 
+                let jsonUrl = "https://booth.pm/ja/items/" + el.data_product_id + ".json"
                 try {
-                    const response = await axios.get(el.url);
-                    const $ = cheerio.load(response.data);
+                    const response = await axios.get(jsonUrl);
+                    let data = response.data;
                     item.booth_item_id = el.id;
-                    item.data_product_id = $('.market').attr('data-product-id');
-                    item.data_product_brand = $('.market').attr('data-product-brand');
-                    item.data_product_category = $('.market').attr('data-product-category');
-                    item.img = $('.market-item-detail-item-image-wrapper > img').attr('src');
-                    let like = $('.wishlists_count').first().text();
+                    item.data_product_id = data.id;
+                    item.data_product_brand = data.shop.subdomain;
+                    item.shop_name = data.shop.name;
+                    item.category_id = data.category.id;
+                    item.img = data.images.original;
+                    let like = data.wish_lists_count;
                     if (typeof like == 'undefined') {
                         like = null
                     } else if (like == null) {
