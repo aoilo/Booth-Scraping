@@ -83,7 +83,7 @@ const insertItemData = async (itemData) => {
     }
 }
 
-cron.schedule('*/11 * * * *', async () => {
+cron.schedule('*/15 * * * *', async () => {
     console.log('Running the scraper...')
     try {
         const itemData = await scrapeWebsite()
