@@ -9,6 +9,7 @@ const BoothItem = sequelize.define('boothitems', {
     data_product_category: { field: 'data_product_category', type: Sequelize.INTEGER, allowNull: true },
     url: { field: 'url', type: Sequelize.TEXT },
     img: { field: 'img', type: Sequelize.TEXT },
+    likes: { field: 'likes', type: Sequelize.INTEGER, allowNull: true },
     createdAt: { field: 'created_at', type: Sequelize.DATE, },
     updatedAt: { field: 'updated_at', type: Sequelize.DATE, }
 });
