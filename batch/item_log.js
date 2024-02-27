@@ -29,7 +29,7 @@ const scrapeWebsite = async () => {
                 let jsonUrl = "https://booth.pm/ja/items/" + el.data_product_id + ".json"
                 try {
                     const response = await fetch(jsonUrl);
-                    let data = response.json()
+                    let data = await response.json()
                     item.booth_item_id = el.id;
                     item.data_product_id = data.id;
                     item.data_product_brand = data.shop.subdomain;
