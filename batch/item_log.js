@@ -1,5 +1,4 @@
 const cron = require('node-cron');
-const axios = require('axios');
 const cheerio = require('cheerio');
 const { Op } = require('sequelize');
 const moment = require('moment');
@@ -29,8 +28,8 @@ const scrapeWebsite = async () => {
 
                 let jsonUrl = "https://booth.pm/ja/items/" + el.data_product_id + ".json"
                 try {
-                    const response = await axios.get(jsonUrl);
-                    let data = response.data;
+                    const response = await fetch(jsonUrl);
+                    let data = response.json()
                     item.booth_item_id = el.id;
                     item.data_product_id = data.id;
                     item.data_product_brand = data.shop.subdomain;
